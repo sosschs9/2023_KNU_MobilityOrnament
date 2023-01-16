@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>2023 KNU 모빌리티 오너먼트 경진대회</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../static/assets/css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+		<style>
+			video { max-width: 100%; display: block; margin: 20px auto; }
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Header -->
+			<div id="header">
+				<div class="top">
+
+					<!-- Logo -->
+						<div id="logo">
+							<span class="image avatar48"><img src="../static/images/head.jpeg" alt=""/></span>
+							<h1 id="title">모도리</h1>
+							<p>KNU CSE</p>
+						</div>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li><a href="#top" id="top-link"><span class="icon solid fa-home">Intro</span></a></li>
+								<li><a href="#portfolio" id="portfolio-link"><span class="icon solid fa-th">Drive Data</span></a></li>
+								<li><a href="#about" id="about-link"><span class="icon solid fa-user">Result</span></a></li>
+							</ul>
+						</nav>
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main">
+
+				<!-- Intro -->
+					<section id="top" class="one dark cover" style="height: 100vh;">
+						<div class="container">
+
+							<header>
+								<h2 class="alt" style="color: black">카쉐어링 고객 운전습관 데이터 분석<br/>
+								Analysis of Driving Habits Data</h2>
+								<p>2023 KNU Mobility Ornament<br />
+								Created by. 모도리</p>
+							</header>
+
+							<footer>
+								<a href="#portfolio" class="button scrolly">View</a>
+							</footer>
+
+						</div>
+					</section>
+
+				<!-- Portfolio -->
+					<section id="portfolio" class="two">
+						<div class="container">
+							<h2>위반요소</h2>
+
+							<div style="margin: 2rem; padding: 2rem">
+							<table>
+								<thead>
+								<tr bgcolor="gray" align="center">
+									<td>날짜</td><td>충돌</td><td>안전거리 미확보</td><td>급가속</td>
+								</tr>
+								</thead>
+
+								<tbody>
+								{% for data in data_list2 %}
+								<tr align="center">
+									<td>{{ data[0] }}</td>
+
+									{% if data[1] == 0 %}
+									<td>-</td>
+									{% else %}
+									<td>{{ data[1] }}</td>
+									{% endif %}
+
+									{% if data[2] == 0 %}
+									<td>-</td>
+									{% else %}
+									<td>{{ data[2] }}</td>
+									{% endif %}
+
+									{% if data[3] == 0 %}
+									<td>-</td>
+									{% else %}
+									<td>{{ data[3] }}</td>
+									{% endif %}
+								</tr>
+								{% endfor %}
+								</tbody>
+							</table>
+							</div>
+
+							<div style="margin: 2rem; padding: 2rem">
+								<h4 align="left">분야별 위반 횟수</h4>
+								<canvas id="myChart"></canvas>
+							</div>
+
+							<div style="margin: 2rem; padding: 2rem">
+								<h4 align="left">차선이탈 확인용 영상</h4>
+								<video controls>
+									<source src="../static/video/LaneWarning.mp4" type="video/mp4">
+									<strong>Your browser does not support the video tag.</strong>
+								</video>
+							</div>
+						</div>
+
+
+					</section>
+
+				<!-- About Me -->
+					<section id="about" class="three">
+						<div class="container">
+
+							<header>
+								<h2>데이터 분석 결과</h2>
+							</header>
+
+
+							<div style="margin: 2rem; padding: 2rem">
+								{% if danger == True %}
+	`							<h3 style="color: #FF5675;">위험군에 속하는 고객입니다. (제재 필요)</h3>
+								{% else %}
+								<h3 style="color: #FF5675;">위험군에 속하지 않는 고객입니다.</h3>
+								{% endif %}
+								<table>
+									<tr align="center">
+										<td>고객 성함</td>
+										<td>{{ car_data[1] }}</td>
+									</tr>
+									<tr align="center">
+										<td>사용 시작 시간</td>
+										<td>{{ car_data[2] }}</td>
+									</tr>
+									<tr align="center">
+										<td>사용 종료 시간</td>
+										<td>{{ car_data[3] }}</td>
+									</tr>
+									<tr align="center">
+										<td>총 사용 시간</td>
+										<td>{{ car_data[4] }}(s)</td>
+									</tr>
+								</table>
+
+
+							</div>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Footer -->
+			<div id="footer">
+
+				<!-- Copyright -->
+					<ul class="copyright">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+
+			</div>
+
+		<!-- Scripts -->
+		<script src="../static/assets/js/jquery.min.js"></script>
+		<script src="../static/assets/js/jquery.scrolly.min.js"></script>
+		<script src="../static/assets/js/jquery.scrollex.min.js"></script>
+		<script src="../static/assets/js/browser.min.js"></script>
+		<script src="../static/assets/js/breakpoints.min.js"></script>
+		<script src="../static/assets/js/util.js"></script>
+		<script src="../static/assets/js/main.js"></script>
+		<script>
+		var myChart = document.getElementById('myChart').getContext('2d');
+		var massPopChart = new Chart(myChart, {
+			type : 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea;
+			data : {
+				labels : [ '충돌' , '안전거리 미확보', '급가속', '차선이탈'],
+				datasets:[{
+					label : 'counting',
+					data : {{ data_list | tojson }},
+					backgroundColor: [
+						'rgba(255, 99, 132, 0.2)',
+						'rgba(54, 162, 235, 0.2)',
+						'rgba(255, 206, 86, 0.2)',
+						'rgba(75, 192, 192, 0.2)',
+						'rgba(153, 102, 255, 0.2)',
+						'rgba(255, 159, 64, 0.2)'
+					],
+					borderColor: [
+						'rgba(255, 99, 132, 1)',
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(153, 102, 255, 1)',
+						'rgba(255, 159, 64, 1)'
+					],
+					borderWidth: 1
+				}]
+			},
+			options : {
+				scales: {
+					x: {
+
+					},
+					y: {
+						suggestedMin: 0,
+						suggestedMax: 15,
+					}
+				}
+			}
+		});
+		</script>
+	</body>
+</html>
